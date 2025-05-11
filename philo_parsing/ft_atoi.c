@@ -22,7 +22,7 @@ int	ft_atoi(char *str, t_setup *setup)
 		result = result * 10 + (str[i] - '0');
 		if ((sign == 1 && result > 2147483647)
 			|| (sign == -1 && - result < -2147483648))
-			cleanup_and_exit(setup, "[-] Error: Number too long.\n");
+			cleanup_and_exit(setup, "[-] Error: Number too long.\n", 1);
 		i++;
 	}
 	return (result * sign);
