@@ -1,10 +1,12 @@
-# include "_philo.h"
+# include "philo.h"
+
+// done //
 
 void	setup_user_args(t_setup *setup, char **argv)
 {
 	setup->user_args = gc_malloc(setup->gc, sizeof(t_user_args));
 	if (!setup->user_args)
-		cleanup_and_exit(setup, "[-] Error: malloc failed.\n", 1);	// use cleanup_and_exit
+		cleanup_and_exit(setup, "[-] Error: malloc failed.\n", 1);
 	setup->user_args->nbr_of_philo = ft_atoi(argv[1], setup);
 	setup->user_args->time_to_die = ft_atoi(argv[2], setup);
 	setup->user_args->time_to_eat = ft_atoi(argv[3], setup);
@@ -14,30 +16,33 @@ void	setup_user_args(t_setup *setup, char **argv)
 		setup->user_args->must_eat_meals = ft_atoi(argv[5], setup);
 }
 
-void	init_philos(t_setup *setup)
+t_setup	*init_setup(int argc, char **argv)
 {
-	int	i;
-	int	philo_nbr;
-	
-	philo_nbr = setup->user_args->nbr_of_philo;
-	setup->forks = gc_malloc(setup->gc, (sizeof(pthread_mutex_t) * philo_nbr));
-	setup->philo = gc_malloc(setup->gc, sizeof(t_philo) * philo_nbr);
-	if (!setup->forks || !setup->philo)
+	t_setup	*setup;
+	t_gc	*gc;
+
+	gc = gc_init();
+	setup = gc_malloc(gc, sizeof(t_setup));
+	if (!gc || !setup)
 		cleanup_and_exit(setup, "[-] Error: malloc failed.\n", 1);
-	i = -1;
-	while (++i < philo_nbr)
-		pthread_mutex_init(&setup->forks[i], NULL);
-	i = -1;
-	while (++i < philo_nbr)
-	{
-		setup->philo[i].id = (i + 1);
-		setup->philo[i].eat_count = 0;
-		setup->philo[i].last_meal_time = 0;
-		setup->philo[i].left_fork = &setup->forks[i];
-		setup->philo[i].right_fork = &setup->forks[(i + 1) % philo_nbr];
-		setup->philo[i].print_mutex = &setup->print_mutex;
-		setup->philo[i].meal_mutex = &setup->meal_mutex;
-		setup->philo[i].death_mutex = &setup->death_mutex;
-		setup->philo[i].someone_died = &setup->someone_died;
-	}
+	setup->gc = gc;
+	input_parsing(argc, argv, setup);	// >>> parsing user input before get started
+	setup->someone_died = 0;
+	setup->all_ate_enough = 0;
+	// >>> about the pthread_mutex_init <<<
+	// >>> We use pthread_mutex_init to initialize a mutex, which protects access
+	//     to a shared resource so that only one thread (philosopher) can access
+	//     it at a time. This prevents race conditions
+	// >>> When a philosopher wants to use a shared resource, it locks the mutex
+	//     When it's done, it unlocks the mutex so other philosophers can use it
+	// NOTE: if another philosopher (thread) tries to lock it, they will wait (block) until it is unlocked.
+	pthread_mutex_init(&setup->print_mutex, NULL); // >>> Protects console output from being mixed between threads
+	pthread_mutex_init(&setup->meal_mutex, NULL);  // >>> Protects access to `last_meal`; philosophers update it, monitor reads it
+	pthread_mutex_init(&setup->death_mutex, NULL); // >>> Protects access to `someone_died` flag; ensures only one thread can read/write it at a time
+	// Mutex -> (tool to synchronization and protect shared data)
+	setup_user_args(setup, argv);
+	setup->start_time = get_time_ms();
+	setup->user_args->start_time = setup->start_time;
+	init_philos(setup);
+	return (setup);
 }

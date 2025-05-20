@@ -1,4 +1,4 @@
-# include "_philo.h"
+# include "philo.h"
 
 void	cleanup_and_exit(t_setup *setup, char *msg, int stat)
 {

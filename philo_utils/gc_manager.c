@@ -1,4 +1,6 @@
-# include "_philo.h"
+# include "philo.h"
+
+// done //
 
 t_gc	*gc_init(void)
 {
