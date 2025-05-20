@@ -1,4 +1,4 @@
-# include "_philo.h"
+# include "philo.h"
 
 int	ft_atoi(char *str, t_setup *setup)
 {

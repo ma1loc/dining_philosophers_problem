@@ -1,8 +1,6 @@
-#include "_philo.h"
+#include "philo.h"
 
-// parasing philo Test
-// ./philo 1+1 1 1 1
-
+// done //
 void	is_valid_digits(char **argv, t_setup *setup)
 {
 	int	i;
@@ -10,10 +8,9 @@ void	is_valid_digits(char **argv, t_setup *setup)
 	i = 1;
 	while (argv[i])
 	{
-		// printf("before argv[%d] -> %s\n", i, argv[i]);
 		if (ft_atoi(argv[i], setup) <= 0)
-			cleanup_and_exit(setup, "[-] Error:"\
-			" args Not a valid number.\n", 1);
+			cleanup_and_exit(setup, "[-] Error: args Not"\
+				" a valid number.\n", 1);
 		i++;
 	}
 }
@@ -48,13 +45,13 @@ void	input_parsing(int argc, char **argv, t_setup *setup)
 
 	i = 1;
 	if (argc != 5 && argc != 6)
-		cleanup_and_exit(setup, "[-] Error:"\
-		" Number of args not currect.\n", 1);
+		cleanup_and_exit(setup, "[-] Error: Number of args"\
+			" not correct.\n", 1);
 	while (argv[i])
 	{
 		if (is_invalid_input(argv[i]))
-			cleanup_and_exit(setup, "[-] Error:"\
-			" The args syntax not currect.\n", 1);
+			cleanup_and_exit(setup, "[-] Error: The args"\
+				" syntax not correct.\n", 1);
 		i++;
 	}
 	is_valid_digits(argv, setup);
