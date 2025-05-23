@@ -62,21 +62,22 @@ typedef struct s_setup
 	int				all_ate_enough;	// >>> added to track if all philosophers ate enough
 }	t_setup;
 
-int		ft_atoi(char *str, t_setup *setup);
+// int		ft_atoi(char *str, t_setup *setup);
 size_t	ft_strlen(char *str);
 void	ft_putstr_fd(char *s, int fd);
 t_setup	*init_setup(int argc, char **argv);
-void	setup_user_args(t_setup *setup, char **argv);
+// void	setup_user_args(t_setup *setup, char **argv);
 t_gc	*gc_init(void);
 void	*gc_malloc(t_gc *gc, size_t size);
 void	gc_free(t_gc *gc, void *ptr);
 void	gc_destroy(t_gc *gc);
-void	input_parsing(int argc, char **argv, t_setup *setup);
-void	cleanup_and_exit(t_setup *setup, char *msg, int stat);
+// void	input_parsing(int argc, char **argv, t_setup *setup);
+// void	cleanup_and_exit(t_setup *setup, char *msg, int stat, int destroy_flag);
+// void	cleanup_and_exit(t_setup *setup, char *msg, int stat);
 long	get_time_ms(void);
 void	ft_usleep(size_t	milliseconds);
-void	init_philos(t_setup *setup);
-void	init_philos(t_setup *setup);
+// void	init_philos(t_setup *setup);
+// void	init_philos(t_setup *setup);
 void	start_simulation(t_setup *setup);
 void	*philo_routine(void *arg);
 void	print_status(t_philo *philo, char *status);
@@ -91,5 +92,10 @@ int		died_break(t_philo *philo);
 void	pickup_forks(t_philo *philo);
 void	drop_the_forks(t_philo *philo);
 
+void	cleanup_and_exit(t_setup *setup, char *msg, int destroy_flag);
+int		init_philos(t_setup *setup);
+int		input_parsing(int argc, char **argv, t_setup *setup);
+int		setup_user_args(t_setup *setup, char **argv);
+int		ft_atoi(char *str);
 
 # endif
