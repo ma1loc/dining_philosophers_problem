@@ -1,4 +1,16 @@
-# include "philo.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_setup.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yanflous <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/23 17:23:51 by yanflous          #+#    #+#             */
+/*   Updated: 2025/05/23 17:23:52 by yanflous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo.h"
 
 int	setup_user_args(t_setup *setup, char **argv)
 {
@@ -23,10 +35,11 @@ t_setup	*init_setup(int argc, char **argv)
 	gc = gc_init();
 	setup = gc_malloc(gc, sizeof(t_setup));
 	if (!gc || !setup)
-		return (cleanup_and_exit(setup, "[-] Error: malloc failed.\n", 1), NULL);	// fixed
+		return (cleanup_and_exit(setup, "[-] Error: "\
+			"malloc failed.\n", 1), NULL);
 	setup->gc = gc;
-	if (input_parsing(argc, argv, setup))	// check the fix
-		return(NULL);
+	if (input_parsing(argc, argv, setup))
+		return (NULL);
 	setup->someone_died = 0;
 	setup->all_ate_enough = 0;
 	pthread_mutex_init(&setup->print_mutex, NULL);
