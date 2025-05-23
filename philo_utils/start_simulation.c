@@ -19,7 +19,7 @@ void	init_last_meal_time(t_setup *setup)
 // >>> pthread_create -> creates and starts threads immediately
 // >>> pthread_create() requests the OS to create a new thread.
 // >>> but actual execution order is not under your control
-void	create_philo_threads(t_setup *setup)
+int	create_philo_threads(t_setup *setup)
 {
 	int	i;
 	int	philo_nbr;
@@ -28,11 +28,11 @@ void	create_philo_threads(t_setup *setup)
 	philo_nbr = setup->user_args->nbr_of_philo;
     while (++i < philo_nbr)
     {
-		// printf("%d\n", i);
         if (pthread_create(&setup->philo[i].thread, NULL, 
                             philo_routine, &setup->philo[i]) != 0)
-            cleanup_and_exit(setup, "[-] Error: phread_create failed\n", 1);
+            return (cleanup_and_exit(setup, "[-] Error: phread_create failed\n", 1), 1);
     }
+	return (0);
 }
 
 // is it run under the order of the creation using the ptherad_join
@@ -63,14 +63,17 @@ void	start_simulation(t_setup *setup)
 	init_last_meal_time(setup);
 
     // >>> create and init the philos threads
-    create_philo_threads(setup);
+    if (create_philo_threads(setup))
+		return ;
 
     // >>> give threads a small moment to initialize
     usleep(100);
 
     // >>> create monitor thread
     if (pthread_create(&monitor, NULL, monitor_routine, setup) != 0)
-        cleanup_and_exit(setup, "[-] Error: monitor thread creation failed.\n", 1);
+        return (cleanup_and_exit(setup, "[-] Error: "\
+			"monitor thread creation failed.\n", 1), (void)0);
+
     
 	// >>> wait the threads intel finish
     set_pthread_join(setup, monitor);
