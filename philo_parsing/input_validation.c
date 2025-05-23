@@ -1,18 +1,18 @@
 #include "philo.h"
 
-// done //
-void	is_valid_digits(char **argv, t_setup *setup)
+int	is_valid_digits(char **argv, t_setup *setup)
 {
 	int	i;
 
 	i = 1;
 	while (argv[i])
 	{
-		if (ft_atoi(argv[i], setup) <= 0)
-			cleanup_and_exit(setup, "[-] Error: args Not"\
-				" a valid number.\n", 1);
+		if (ft_atoi(argv[i]) <= 0)
+			return (cleanup_and_exit(setup, "[-] Error: args Not"\
+				" a valid number.\n", 0), 1);
 		i++;
 	}
+	return (0);
 }
 
 int	is_invalid_input(char *str)
@@ -39,20 +39,22 @@ int	is_invalid_input(char *str)
 	return (0);
 }
 
-void	input_parsing(int argc, char **argv, t_setup *setup)
+int	input_parsing(int argc, char **argv, t_setup *setup)
 {
 	int	i;
 
 	i = 1;
-	if (argc != 5 && argc != 6)
-		cleanup_and_exit(setup, "[-] Error: Number of args"\
-			" not correct.\n", 1);
+	if (argc != 5 && argc != 6)	
+		return (cleanup_and_exit(setup, "[-] Error: Number of args"\
+			" not correct.\n", 0), 1);
 	while (argv[i])
 	{
 		if (is_invalid_input(argv[i]))
-			cleanup_and_exit(setup, "[-] Error: The args"\
-				" syntax not correct.\n", 1);
+			return (cleanup_and_exit(setup, "[-] Error: The args"\
+				" syntax not correct.\n", 0), 1);
 		i++;
 	}
-	is_valid_digits(argv, setup);
+	if (is_valid_digits(argv, setup))
+		return (1);
+	return (0);
 }
