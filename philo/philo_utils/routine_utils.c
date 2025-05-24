@@ -6,7 +6,7 @@
 /*   By: yanflous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:24:38 by yanflous          #+#    #+#             */
-/*   Updated: 2025/05/23 17:24:41 by yanflous         ###   ########.fr       */
+/*   Updated: 2025/05/24 16:36:26 by yanflous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,20 @@ int	died_break(t_philo *philo)
 
 void	pickup_forks(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
+	// Fix for odd number deadlock: use consistent ordering based on fork address
+	// Always pick up the fork with lower memory address first
+	if (philo->left_fork < philo->right_fork)
 	{
-		pthread_mutex_lock(philo->right_fork);
-		print_status(philo, "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
+		print_status(philo, "has taken a fork");
+		pthread_mutex_lock(philo->right_fork);
 		print_status(philo, "has taken a fork");
 	}
 	else
 	{
-		pthread_mutex_lock(philo->left_fork);
-		print_status(philo, "has taken a fork");
 		pthread_mutex_lock(philo->right_fork);
+		print_status(philo, "has taken a fork");
+		pthread_mutex_lock(philo->left_fork);
 		print_status(philo, "has taken a fork");
 	}
 }
