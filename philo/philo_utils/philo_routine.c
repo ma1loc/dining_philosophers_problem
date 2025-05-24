@@ -56,6 +56,11 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	
+	// Add staggered start for odd philosophers to prevent synchronization issues
+	if (philo->id % 2 == 1)
+		ft_usleep(50);
+	
 	while (1)
 	{
 		if (died_break(philo))
@@ -71,10 +76,22 @@ void	*philo_routine(void *arg)
 		ft_usleep(philo->user_args->time_to_eat);
 		update_eat_count(philo);
 		drop_the_forks(philo);
+		
+		// Brief pause after eating to allow other philosophers to act
 		usleep(100);
+		
 		print_status(philo, "is sleeping");
 		ft_usleep(philo->user_args->time_to_sleep);
 		print_status(philo, "is thinking");
+		
+		// Add thinking time for odd numbers to prevent tight loops
+		if (philo->user_args->nbr_of_philo % 2 == 1)
+		{
+			// Calculate thinking time to help with synchronization
+			int think_time = (philo->user_args->time_to_eat * 2) - philo->user_args->time_to_sleep;
+			if (think_time > 0)
+				ft_usleep(think_time / 2);
+		}
 	}
 	return (NULL);
 }
