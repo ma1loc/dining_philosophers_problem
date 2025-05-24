@@ -6,7 +6,7 @@
 /*   By: yanflous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:24:22 by yanflous          #+#    #+#             */
-/*   Updated: 2025/05/23 17:24:23 by yanflous         ###   ########.fr       */
+/*   Updated: 2025/05/24 16:36:26 by yanflous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	*philo_routine(void *arg)
 	{
 		if (died_break(philo))
 			break ;
-		print_status(philo, "is thinking");
 		if (philo->user_args->nbr_of_philo == 1)
 		{
 			single_philo(philo);
@@ -72,10 +71,10 @@ void	*philo_routine(void *arg)
 		ft_usleep(philo->user_args->time_to_eat);
 		update_eat_count(philo);
 		drop_the_forks(philo);
-		drop_the_forks(philo);
 		usleep(100);
 		print_status(philo, "is sleeping");
 		ft_usleep(philo->user_args->time_to_sleep);
+		print_status(philo, "is thinking");
 	}
 	return (NULL);
 }
