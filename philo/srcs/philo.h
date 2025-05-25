@@ -99,5 +99,9 @@ int		init_philos(t_setup *setup);
 int		input_parsing(int argc, char **argv, t_setup *setup);
 int		setup_user_args(t_setup *setup, char **argv);
 int		ft_atoi(char *str);
+void	thinking_time(t_philo *philo);
+void	operations(t_philo *philo);
+void	update_last_meal_time(t_philo *philo);
+void	update_eat_count(t_philo *philo);
 
 #endif
